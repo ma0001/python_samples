@@ -29,7 +29,7 @@ def complete_file_path(file_path, current_file_path):
 
     # ディレクトリでない場合は、何もしない
     if not os.path.isdir(dir_path):
-        return None
+        return current_file_path
 
     # そのディレクトリ内のstart_nameで始まるファイル名を取得する
     files = os.listdir(dir_path)
