@@ -11,12 +11,12 @@ from tkinterdnd2 import DND_FILES, TkinterDnD
 from tkinter import filedialog
 
 # 入力中のファイルパスと現在の補完名をとり、次の補完名候補を返す
-def complete_file_path(file_path, current_file_path):
+def complete_next(file_path, current_completion):
     # 最後の/を削除
     file_path = file_path.rstrip("/")
-    current_file_path = current_file_path.rstrip("/")
+    current_completion = current_completion.rstrip("/")
     file_path = os.path.expanduser(file_path)
-    current_file_path = os.path.expanduser(current_file_path)
+    current_completion = os.path.expanduser(current_completion)
     # ディレクトリーと候補の先頭文字列を取り出す
     if os.path.isdir(file_path):
         dir_path = file_path
@@ -29,7 +29,7 @@ def complete_file_path(file_path, current_file_path):
 
     # ディレクトリでない場合は、何もしない
     if not os.path.isdir(dir_path):
-        return current_file_path
+        return current_completion
 
     # そのディレクトリ内のstart_nameで始まるファイル名を取得する
     files = os.listdir(dir_path)
@@ -41,10 +41,10 @@ def complete_file_path(file_path, current_file_path):
 
     # 補完候補がないなら、何もしない
     if len(files) == 0:
-        return current_file_path
+        return current_completion
 
     try:
-        next_index = files.index(current_file_path) + 1
+        next_index = files.index(current_completion) + 1
         if next_index >= len(files):
             next_index = 0
     except ValueError:
@@ -104,7 +104,7 @@ class FileSelectorFrame(tkinter.Frame):
         file_path = self.get_file_path()
         if not self.__inputpath:
             self.__inputpath = file_path
-        file_path = complete_file_path(self.__inputpath, file_path)
+        file_path = complete_next(self.__inputpath, file_path)
         if file_path:
             self.set_file_path(file_path)
         # フォーカスを移動させない
